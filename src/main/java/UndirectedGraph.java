@@ -1,29 +1,58 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class Graph {
+public class UndirectedGraph {
 
 //    implements graph using Adjacency Edge List
-    List<List<WeightedEdge>> nodes;
+    private HashMap<Integer, List<WeightedEdge>> nodes;
 //    count of nodes in the graph
-    int count;
+    private int count;
+
+    /**
+     * returns the nodes' edges lists
+     *
+     * @return all nodes in the graph
+     */
+    public HashMap<Integer, List<WeightedEdge>> getNodes() {
+        return nodes;
+    }
+
+    /**
+     * returns the edge list of the specified node
+     *
+     * @param node node that you want to retrieve
+     * @return the edge list associate with the node
+     */
+    public List<WeightedEdge> getNode(int node) {
+        return nodes.get(node);
+    }
+
+    public int getCount() {
+        return count;
+    }
+
 
     /**
      * creates a graph with a specific number of nodes
      *
      * @param count number of nodes the graph can hold
      */
-    public Graph(int count) {
+    public UndirectedGraph(int count) {
 //        assigns count value
         this.count = count;
 //        initialize the nodes list
-        nodes = new ArrayList<>();
+        nodes = new HashMap<>();
 //        loops the amount of times specified by count and initializes each node to an empty list
         for (int i = 0; i < count; i++) {
-            nodes.add(new ArrayList<>());
+            nodes.put( i,new ArrayList<>());
         }
     }
 
+    public UndirectedGraph() {
+        nodes = new HashMap<>();
+        count = 0;
+    }
 
     /**
      * adds an edge to the graph
@@ -33,6 +62,11 @@ public class Graph {
      * @param weight weight of the edge
      */
     public void addEdge(int node1, int node2, int weight) {
+//        in the case in which the default constructor is used, add the specified nodes to the graph first
+        if (!nodes.containsKey(node1))
+            nodes.put(node1, new ArrayList<>());
+        if (!nodes.containsKey(node2))
+            nodes.put(node2, new ArrayList<>());
 //        adds edge to node x's edge list
         nodes.get(node1).add(new WeightedEdge(node1, node2, weight));
 //        adds edge to node y's edge list
@@ -60,7 +94,7 @@ public class Graph {
     /**
      * uses the DFS function to return a boolean value corresponding to if the graph has a cycle or not
      *
-     * @return true/false representing whether the graph has a cycle
+     * @return true if the graph has a cycle
      */
     public boolean hasCycle() {
 //        creates a boolean array of size count
@@ -75,7 +109,7 @@ public class Graph {
      * @param node node of a graph
      * @param visited array of all the nodes that have been visited through Depth First Search (DFS)
      * @param parent parent node of the node
-     * @return true/false representing whether the graph has a cycle
+     * @return true if a cycle exists
      */
     public boolean DFS(int node, boolean [] visited, int parent) {
 //        sets visited as true for the current node

@@ -6,17 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 public class MinimalSpanningTree {
+    public static UndirectedGraph MST(UndirectedGraph graph) {
+        UndirectedGraph T = new UndirectedGraph(graph.getCount());
 
-    /*public static Graph findMST(Graph graph) {
-
-        List<Vertex> verticesInGraph = graph.vertices;
-        List<Vertex> verticesInMST = new ArrayList<>();
-        Graph returnGraph = new Graph();
-
-        verticesInMST.add(verticesInMST.get(0));
-
-        while (verticesInMST.size() < verticesInGraph.size()) {
+        while (T.getCount() < graph.getCount()) {
 
         }
-    }*/
+        return T;
+    }
 }

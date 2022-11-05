@@ -1,14 +1,30 @@
 public class WeightedEdge {
+//    one of the nodes that make up the edge
     int node1;
+//    one of the nodes that make up the edge
     int node2;
+//    weight of the edge
     int weight;
 
+    /**
+     * creates an edge with specified endpoints and weight
+     *
+     * @param node1 first node of the edge
+     * @param node2 second node of the edge
+     * @param weight weight of the edge
+     */
     public WeightedEdge(int node1, int node2, int weight) {
         this.node1 = node1;
         this.node2 = node2;
         this.weight = weight;
     }
 
+    /**
+     * creates an edge with specified endpoints and a weight of 0
+     *
+     * @param node1 first node of the edge
+     * @param node2 second node of the edge
+     */
     public WeightedEdge(int node1, int node2) {
         this.node1 = node1;
         this.node2 = node2;
@@ -20,6 +36,12 @@ public class WeightedEdge {
         return String.format("[ %d - %d | weight: %d]", node1, node2, weight);
     }
 
+    /**
+     * determines if this object and another are equal
+     *
+     * @param o object that this object is being compared to
+     * @return true if the objects are equivalent
+     */
     @Override
     public boolean equals(Object o) {
 
@@ -31,6 +53,11 @@ public class WeightedEdge {
         return weight == that.weight;
     }
 
+    /**
+     * creates and returns hashcode of this object
+     *
+     * @return hashcode of the edge
+     */
     @Override
     public int hashCode() {
         int result = (node1 + node2);
