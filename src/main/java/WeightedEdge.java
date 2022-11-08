@@ -1,4 +1,4 @@
-public class WeightedEdge {
+public class WeightedEdge implements Comparable<WeightedEdge>{
 //    one of the nodes that make up the edge
     int node1;
 //    one of the nodes that make up the edge
@@ -64,5 +64,10 @@ public class WeightedEdge {
         result = 31 * result + (node2 + node1);
         result = 31 * result + weight;
         return result;
+    }
+
+    @Override
+    public int compareTo(WeightedEdge o) {
+        return this.weight - o.weight;
     }
 }
