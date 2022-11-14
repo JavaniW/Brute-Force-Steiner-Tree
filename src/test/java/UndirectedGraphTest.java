@@ -8,7 +8,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class UndirectedGraphTest {
 
     static UndirectedGraph undirectedGraph1;
+    static UndirectedGraph undirectedGraph1Mst;
     static UndirectedGraph undirectedGraph2;
+
+    static UndirectedGraph testGraph1;
+    static UndirectedGraph testGraph2;
+    static UndirectedGraph testGraph3;
+    static UndirectedGraph testGraph4;
+    static UndirectedGraph testGraph5;
 
     @BeforeAll
     static void beforeAll() {
@@ -21,7 +28,10 @@ class UndirectedGraphTest {
 
 //        using default constructor
         undirectedGraph2 = new UndirectedGraph();
+
+
     }
+
 
     @Test
     void addEdge() {
@@ -66,13 +76,21 @@ class UndirectedGraphTest {
 
     @Test
     void MST() {
-        UndirectedGraph mst = MinimalSpanningTree.MST(undirectedGraph1);
-        mst.printGraph();
-//        MinimalSpanningTree.getAllEdges(mst);
-        ArrayList<WeightedEdge> listOfEdges = new ArrayList<>(MinimalSpanningTree.getAllEdges(mst));
-        for (WeightedEdge edge : listOfEdges) {
+        undirectedGraph1Mst = MinimalSpanningTree.MST(undirectedGraph1);
+        undirectedGraph1Mst.printGraph();
+        for (WeightedEdge edge : undirectedGraph1Mst.getGraphEdges()) {
             System.out.printf("Edge: %d — %d, weight: %d || ", edge.node1, edge.node2,edge.weight);
         }
+    }
+
+    @Test
+    void isConnected() {
+        UndirectedGraph undirectedGraph3 = new UndirectedGraph();
+        undirectedGraph3.addEdge(0, 1, 10);
+        undirectedGraph3.addEdge(0, 2, 7);
+        undirectedGraph3.addEdge(2, 3, 8);
+        assertTrue(undirectedGraph3.isConnected());
+        assertTrue(undirectedGraph1Mst.isConnected());
     }
 
     @Test

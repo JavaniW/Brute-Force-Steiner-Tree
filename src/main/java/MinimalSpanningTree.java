@@ -9,10 +9,15 @@ public class MinimalSpanningTree {
      * @return a new graph which is the minimal spanning tree
      */
     public static UndirectedGraph MST(UndirectedGraph graph) {
+        if (graph.getCount() < 1)
+            return graph;
+        if (!graph.isConnected())
+            return graph;
+
 //        creates a new empty undirected graph
         UndirectedGraph minimumTree = new UndirectedGraph();
 //        retrieves all the edges from the original graph
-        List<WeightedEdge> allEdges = getAllEdges(graph);
+        List<WeightedEdge> allEdges = new ArrayList<>(graph.getGraphEdges());
 //        sorts the edges by weight
         Collections.sort(allEdges);
 
@@ -33,12 +38,12 @@ public class MinimalSpanningTree {
         return minimumTree;
     }
 
-    /**
+ /*   /**
      * retrieves all the edges found in a graph
      *
      * @param graph the graph in which the edges will be retrieved
      * @return a list of all the edges in the graph with no duplicates
-     */
+     *
     public static List<WeightedEdge> getAllEdges(UndirectedGraph graph) {
 //        creates a hashset to hold the edges (hashsets only hold distinct objects, no duplicates)
         HashSet<WeightedEdge> allEdges = new HashSet<>();
@@ -52,5 +57,5 @@ public class MinimalSpanningTree {
         }
 //        returns the set of all edges converted into a list
         return new ArrayList<>(allEdges);
-    }
+    }*/
 }

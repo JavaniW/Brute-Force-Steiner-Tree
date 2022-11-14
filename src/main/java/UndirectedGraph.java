@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class UndirectedGraph {
 
@@ -8,6 +6,9 @@ public class UndirectedGraph {
     private HashMap<Integer, List<WeightedEdge>> adjList;
 //    count of nodes in the graph
     private int count;
+
+//    set that will hold all edges in the graph
+    private HashSet<WeightedEdge> graphEdges;
 
     /**
      * returns the edge adjacency lists
@@ -46,6 +47,14 @@ public class UndirectedGraph {
         return count;
     }
 
+    /**
+     * returns the set of all weighted edges in the graph
+     *
+     * @return set of weighted edges
+     */
+    public HashSet<WeightedEdge> getGraphEdges() {
+        return graphEdges;
+    }
 
     /**
      * creates a graph with a specific number of nodes
@@ -53,6 +62,8 @@ public class UndirectedGraph {
      * @param count number of nodes the graph can hold
      */
     public UndirectedGraph(int count) {
+//        initializes set from edges
+        graphEdges = new HashSet<>();
 //        assigns count value
         this.count = count;
 //        initialize the nodes list
@@ -64,6 +75,8 @@ public class UndirectedGraph {
     }
 
     public UndirectedGraph() {
+//        initializes set from edges
+        graphEdges = new HashSet<>();
         adjList = new HashMap<>();
         count = 0;
     }
@@ -101,6 +114,8 @@ public class UndirectedGraph {
         adjList.get(node1).add(new WeightedEdge(node1, node2, weight));
 //        adds edge to node 2's edge list
         adjList.get(node2).add(new WeightedEdge(node2, node1, weight));
+//        adds edge to the set of edges
+        graphEdges.add(new WeightedEdge(node1, node2, weight));
     }
 
     /**
@@ -126,36 +141,36 @@ public class UndirectedGraph {
     }
 
     /**
-     * uses the DFS function to return a boolean value corresponding to if the graph has a cycle or not
+     * uses the isCyclic function to return a boolean value corresponding to if the graph has a cycle or not
      *
      * @return true if the graph has a cycle
      */
     public boolean hasCycle() {
 //        creates an int list which will contain the keys of all the nodes that have been visited
         List<Integer> visited = new ArrayList<>();
-//        calls DFS method starting from a random node
+//        calls isCyclic method starting from a random node
         List<Integer> allKeys = new ArrayList<>(adjList.keySet());
-        return DFS(allKeys.get(0), visited, -1);
+        return isCyclic(allKeys.get(0), visited, -1);
     }
 
     /**
-     * performs Depth First Search (DFS) on a graph and determines if it has a cycle of not
+     * performs Depth First Search (isCyclic) on a graph and determines if it has a cycle of not
      *
      * @param node node of a graph
-     * @param visited array of all the nodes that have been visited through Depth First Search (DFS)
+     * @param visited array of all the nodes that have been visited through Depth First Search (isCyclic)
      * @param parent parent node of the node
      * @return true if a cycle exists
      */
-    public boolean DFS(int node, List<Integer> visited, int parent) {
+    public boolean isCyclic(int node, List<Integer> visited, int parent) {
 //        adds the node to the visited list
         visited.add(node);
 //        loops over each edge connected to the current node
         for (WeightedEdge weightedEdge : adjList.get(node)) {
-//            if the node the edge connects to have not been visited, recursively call DFS method
+//            if the node the edge connects to have not been visited, recursively call isCyclic method
 //            passing it the connecting node and the current node as the parent
             if (!visited.contains(weightedEdge.node2)) {
-//                if DFS on the new node returns true, then return true
-                if (DFS(weightedEdge.node2, visited, node)) {
+//                if isCyclic on the new node returns true, then return true
+                if (isCyclic(weightedEdge.node2, visited, node)) {
                     return true;
                 }
             }
@@ -166,6 +181,45 @@ public class UndirectedGraph {
         }
 //        return false
         return false;
+    }
+
+    /**
+     * uses Breadth First Search to determine if the graph is connected
+     *
+     * @return true if the graph is connected
+     */
+    public boolean isConnected() {
+//        creates a set to hold the nodes that have already been visited
+        HashSet<Integer> visited = new HashSet<>();
+//        creates a linked list that will act as a queue for BFS
+        LinkedList<Integer> queue = new LinkedList<>();
+//        sets the starting node as random node in the graph
+        int startingNode = new ArrayList<>(adjList.keySet()).get(0);
+//        adds the startingNode to the queue
+        queue.add(startingNode);
+
+//        loops as long as the queue is not empty
+        while (!queue.isEmpty()) {
+//            sets the node as the node dequeued
+            int node = queue.poll();
+//            adds the node to the visited array
+            visited.add(node);
+
+//            adds every connected node in the current node's adj list to the queue unless it has already been visited
+            for (WeightedEdge edge : adjList.get(node)) {
+//                if the node has already been visited, dismiss it and don't add it to the queue
+                if (visited.contains(edge.node2))
+                    continue;
+//                otherwise, add it to the queue
+                queue.add(edge.node2);
+            }
+        }
+//        if the visited array size is not equal to the count of the graph, then every node has not been visited
+//        and therefore the graph is not connected, so return false
+        if (visited.size() != count)
+            return false;
+//        otherwise, return true
+        return true;
     }
 
     /**
