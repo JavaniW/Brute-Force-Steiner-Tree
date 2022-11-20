@@ -245,7 +245,7 @@ class UndirectedGraphTest {
 
     @Test
     void steinerTree() {
-        UndirectedGraph steinerTree1 = BruteSteinerTree.steinerTree(testGraph1, List.of(0, 1, 4));
+        UndirectedGraph steinerTree1 = BruteSteinerTree.steinerTree(testGraph1, List.of(1, 3));
         testGraph1.printGraph();
         System.out.println("------- MINIMAL SPANNING TREE----------");
         UndirectedGraph MST = MinimalSpanningTree.MST(testGraph1);
@@ -266,5 +266,17 @@ class UndirectedGraphTest {
         assertEquals(undirectedGraph2.getAdjList().get(0).get(0).hashCode(), undirectedGraph2.getAdjList().get(1).get(0).hashCode());
         assertEquals(undirectedGraph2.getAdjList().get(2).get(0).hashCode(), undirectedGraph2.getAdjList().get(3).get(0).hashCode());
 
+    }
+
+    @Test
+    void generateAllCombos() {
+        List<int []> combos = BruteSteinerTree.generateAllCombos(testGraph1);
+
+        for (int [] combo: combos) {
+            for (int i = 0; i < combo.length; i++) {
+                System.out.print(combo[i] + " | ");
+            }
+            System.out.println();
+        }
     }
 }
