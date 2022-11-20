@@ -129,11 +129,45 @@ public class UndirectedGraph {
     public boolean removeEdge(int node1, int node2, int weight) {
 //        creates a mock of the target edge
         WeightedEdge targetEdge = new WeightedEdge(node1, node2, weight);
-//        returns true if target edge is found in both node1 and node2 and also removes edge from thos nodes
-        if (adjList.get(node1).remove(targetEdge))
+//        returns true if target edge is found in both node1 and node2 and also removes edge from those nodes
+        if (adjList.get(node1).remove(targetEdge)) {
+            graphEdges.remove(targetEdge);
             return adjList.get(node2).remove(targetEdge);
+        }
 //        otherwise, return false
         return false;
+    }
+
+    /**
+     * removes a specific edge from the graph. If the edge is the last edge in the edge list of
+     * either node then that node will also be removed from the graph.
+     *
+     * @param node1 first node of the edge
+     * @param node2 second node of the edge
+     * @param weight weight of the edge
+     * @return boolean value corresponding to if the removal was successful
+     */
+    public boolean removeEdgeCascade(int node1, int node2, int weight) {
+//        creates a mock of the target edge
+        WeightedEdge targetEdge = new WeightedEdge(node1, node2, weight);
+
+//        removes the edges from both nodes if it is found. Checks if the resulting nodes has any edges. If not,
+//        then those nodes are also removed from the graph
+        if (adjList.get(node1).remove(targetEdge)) {
+            if (adjList.get(node2).remove(targetEdge)) {
+                if (getNodeEdges(node1).isEmpty())
+                    getAdjList().remove(node1);
+                if (getNodeEdges(node2).isEmpty())
+                    getAdjList().remove(node2);
+                graphEdges.remove(targetEdge);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean removeEdgeCascade(WeightedEdge targetEdge) {
+        return removeEdgeCascade(targetEdge.node1, targetEdge.node2, targetEdge.weight);
     }
 
     public boolean removeEdge(WeightedEdge targetEdge) {
@@ -214,12 +248,9 @@ public class UndirectedGraph {
                 queue.add(edge.node2);
             }
         }
-//        if the visited array size is not equal to the count of the graph, then every node has not been visited
+//        if the visited array does not contain all nodes in the graph, then every node has not been visited
 //        and therefore the graph is not connected, so return false
-        if (visited.size() != count)
-            return false;
-//        otherwise, return true
-        return true;
+        return visited.containsAll(getNodes());
     }
 
     /**
@@ -227,7 +258,16 @@ public class UndirectedGraph {
      */
     public void printGraph() {
 //        loop over each node in the graph
-        for (int i = 0; i < count; i++) {
+        for (int node : getNodes()) {
+//            print the node
+            System.out.print(String.format("Node %d:", node));
+//            loop over each edge of the node
+            for (WeightedEdge weightedEdge : getNodeEdges(node)) {
+//                print the edge
+                System.out.println(String.format("--> %s", weightedEdge));
+            }
+        }
+ /*       for (int i = 0; i < count; i++) {
 //            print the node
             System.out.print(String.format("Node %d:", i));
 //            loop over each edge of the node
@@ -236,6 +276,17 @@ public class UndirectedGraph {
                 System.out.println(String.format("--> %s", weightedEdge));
             }
             System.out.println();
-        }
+        }*/
     }
+
+    /**
+     * returns a boolean value representing if all the target nodes are in the graph
+     *
+     * @param targetNodes the array of nodes to search for
+     * @return false if all the target nodes are not a part of the graph
+     */
+    public boolean containsNodes(List<Integer> targetNodes) {
+        return getNodes().containsAll(targetNodes);
+    }
+
 }
