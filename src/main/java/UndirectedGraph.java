@@ -267,16 +267,60 @@ public class UndirectedGraph {
                 System.out.println(String.format("--> %s", weightedEdge));
             }
         }
- /*       for (int i = 0; i < count; i++) {
-//            print the node
-            System.out.print(String.format("Node %d:", i));
-//            loop over each edge of the node
-            for (WeightedEdge weightedEdge : adjList.get(i)) {
-//                print the edge
-                System.out.println(String.format("--> %s", weightedEdge));
+    }
+
+    /**
+     *
+     * @param node the source node in which the shortest path to other nodes will be derived
+     * @return a two-dimensional array which contains cost from source node to other nodes and the previous node
+     */
+    public int [][] shortestPath(Integer node) {
+
+//        initializes the two-dimensional array. Set two rows. The first row will be the array of costs
+//        and the second row will contain the previous node in the path
+        int [][] costAndPrevious = new int[2][getCount()];
+
+//        fill the first row with the integer max value to represent infinite
+        Arrays.fill(costAndPrevious[0], Integer.MAX_VALUE);
+//        fill the second row up with -1 to signify there is no
+        Arrays.fill(costAndPrevious[1], -1);
+//        initialize the node index of the first row to zero to signify this is the source node
+        costAndPrevious[0][node] = 0;
+//        initialize a set of integers to hold all the nodes in which the shortest path has been found
+        HashSet<Integer> knownPaths = new HashSet<>();
+
+//        loop through each node as long as the shortest path to each node is not known
+        while (knownPaths.size() < getCount()) {
+//            set the minimal cost to integer max value
+            int minCost = Integer.MAX_VALUE;
+//            sets node with minimal cost to -1
+            int nodeWithMinCost = -1;
+//            loop through all nodes with unknown shortest paths
+            for (int i = 0; i < costAndPrevious[0].length; i++) {
+//                if the shortest path is known, continue
+                if (knownPaths.contains(i))
+                    continue;
+//                uses if condition to find the node with the minimal cost
+                if (costAndPrevious[0][i] < minCost) {
+                    minCost = costAndPrevious[0][i];
+                    nodeWithMinCost = i;
+//                    adds the node with the minimal cost to the set of known paths
+                    knownPaths.add(nodeWithMinCost);
+                }
             }
-            System.out.println();
-        }*/
+
+//            loops through all edges of the node with minimal cost
+            for (WeightedEdge adjEdge : getNodeEdges(nodeWithMinCost)) {
+//                if the cost to the adjacent node is smaller going through this node, then change the cost value
+//                and the previous node
+                if (costAndPrevious[0][adjEdge.node2] > costAndPrevious[0][nodeWithMinCost] + adjEdge.weight) {
+                    costAndPrevious[0][adjEdge.node2] = costAndPrevious[0][nodeWithMinCost] + adjEdge.weight;
+                    costAndPrevious[1][adjEdge.node2] = nodeWithMinCost;
+                }
+            }
+        }
+//        return the two-dimensional array
+        return costAndPrevious;
     }
 
     /**

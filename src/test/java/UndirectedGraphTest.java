@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -269,8 +268,24 @@ class UndirectedGraphTest {
     }
 
     @Test
+    void shortestPath() {
+//        testGraph 1
+        int [][] costsAndParents = testGraph1.shortestPath(0);
+        for (int i = 0; i < costsAndParents.length; i++) {
+            for (int j = 0; j < costsAndParents[i].length; j++) {
+                if (i == 0)
+                    System.out.printf("Cost to node %d: %d", j, costsAndParents[i][j]);
+                System.out.println();
+                if (i == 1)
+                    System.out.printf("Parent of node %d: %d", j, costsAndParents[i][j]);
+                System.out.println();
+            }
+        }
+    }
+
+    @Test
     void generateAllCombos() {
-        List<int []> combos = BruteSteinerTree.generateAllCombos(testGraph1);
+        List<int []> combos = BruteSteinerTree.generateAllSubGraphs(testGraph1);
 
         for (int [] combo: combos) {
             for (int i = 0; i < combo.length; i++) {
