@@ -17,8 +17,26 @@ class UndirectedGraphTest {
     static UndirectedGraph testGraph3;
     static UndirectedGraph testGraph4;
 
+    static UndirectedGraph sampleGraph;
+
     @BeforeAll
     static void beforeAll() {
+
+//        creates Markowsky sample graph (weights multiplied by 2 to assure whole number weights)
+        sampleGraph = new UndirectedGraph();
+        sampleGraph.addEdge(0, 1, 20);
+        sampleGraph.addEdge(0, 8, 2);
+        sampleGraph.addEdge(1, 2, 16);
+        sampleGraph.addEdge(1, 5, 2);
+        sampleGraph.addEdge(2, 4, 4);
+        sampleGraph.addEdge(2, 3, 18);
+        sampleGraph.addEdge(3, 4, 4);
+        sampleGraph.addEdge(4, 8, 2);
+        sampleGraph.addEdge(5, 4, 2);
+        sampleGraph.addEdge(5, 6, 2);
+        sampleGraph.addEdge(6, 7, 1);
+        sampleGraph.addEdge(7, 8, 1);
+
 //        creating undirectedGraph1
         undirectedGraph1 = new UndirectedGraph(5);
         undirectedGraph1.addEdge(0, 1, 15);
@@ -281,6 +299,32 @@ class UndirectedGraphTest {
                 System.out.println();
             }
         }
+    }
+
+    @Test
+    void shortestPath2() {
+        List<WeightedEdge> shortestPathZeroToOne = sampleGraph.shortestPath(0, 1);
+        List<WeightedEdge> shortestPathZeroToTwo = sampleGraph.shortestPath(0, 2);
+        List<WeightedEdge> shortestPathZeroToThree = sampleGraph.shortestPath(0, 3);
+
+        List<WeightedEdge> shortestPathOneToTwo = sampleGraph.shortestPath(1, 2);
+        List<WeightedEdge> shortestPathOneToThree = sampleGraph.shortestPath(1, 3);
+
+
+        List<WeightedEdge> shortestPathTwoToThree = sampleGraph.shortestPath(2, 3);
+
+        for (WeightedEdge edge : shortestPathZeroToOne) {
+            System.out.println(edge);
+        }
+
+
+    }
+
+    @Test
+    void heurSteinerTree() {
+
+
+        UndirectedGraph completeGraph = HeuristicSteinerTree.steinerTree(sampleGraph,List.of(0, 1, 2, 3));
     }
 
     @Test

@@ -304,10 +304,11 @@ public class UndirectedGraph {
                 if (costAndPrevious[0][i] < minCost) {
                     minCost = costAndPrevious[0][i];
                     nodeWithMinCost = i;
-//                    adds the node with the minimal cost to the set of known paths
-                    knownPaths.add(nodeWithMinCost);
                 }
             }
+//                    adds the node with the minimal cost to the set of known paths
+            knownPaths.add(nodeWithMinCost);
+
 
 //            loops through all edges of the node with minimal cost
             for (WeightedEdge adjEdge : getNodeEdges(nodeWithMinCost)) {
@@ -321,6 +322,29 @@ public class UndirectedGraph {
         }
 //        return the two-dimensional array
         return costAndPrevious;
+    }
+
+    /**
+     * generates a list of edges which represent the shortest path from node 1 to node 2
+     *
+     * @param node1 source node in which the shortest path will be derived
+     * @param node2 target node in which you want to find the shortest path to
+     * @return a list of edges
+     */
+    public List<WeightedEdge> shortestPath(int node1, int node2) {
+//        use the shortestPath() method to get the costs and prev nodes
+        int [][] costAndParent = shortestPath(node1);
+//        initialize a list to hold the edges of the shortest path
+        List<WeightedEdge> path = new ArrayList<>();
+
+//        loop until you reach the source node
+        while (costAndParent[1][node2] != -1) {
+//            add a new edge to the list from node 2 to the previous node
+            path.add(new WeightedEdge(node2, costAndParent[1][node2], (costAndParent[0][node2] - costAndParent[0][costAndParent[1][node2]])));
+//            set node to as the previous node in the path
+            node2 = costAndParent[1][node2];
+        }
+        return path;
     }
 
     /**
