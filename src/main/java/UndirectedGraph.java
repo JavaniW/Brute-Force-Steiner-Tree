@@ -85,6 +85,7 @@ public class UndirectedGraph {
         if (adjList.containsKey(node))
             return false;
         adjList.put(node, new ArrayList<>());
+        count++;
         return true;
     }
 
@@ -155,10 +156,14 @@ public class UndirectedGraph {
 //        then those nodes are also removed from the graph
         if (adjList.get(node1).remove(targetEdge)) {
             if (adjList.get(node2).remove(targetEdge)) {
-                if (getNodeEdges(node1).isEmpty())
+                if (getNodeEdges(node1).isEmpty()) {
                     getAdjList().remove(node1);
-                if (getNodeEdges(node2).isEmpty())
+                    count--;
+                }
+                if (getNodeEdges(node2).isEmpty()) {
                     getAdjList().remove(node2);
+                    count--;
+                }
                 graphEdges.remove(targetEdge);
                 return true;
             }
@@ -311,6 +316,7 @@ public class UndirectedGraph {
 
 
 //            loops through all edges of the node with minimal cost
+
             for (WeightedEdge adjEdge : getNodeEdges(nodeWithMinCost)) {
 //                if the cost to the adjacent node is smaller going through this node, then change the cost value
 //                and the previous node

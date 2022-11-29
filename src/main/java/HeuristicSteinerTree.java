@@ -37,20 +37,14 @@ public class HeuristicSteinerTree {
             }
         }
 
-        G1.printGraph();
-
 //        Step 2. Find the minimal spanning tree, T1, of G1. (If there are several minimal spanning trees, pick an arbitrary one.)
 //        find the minimal spanning tree of this complete graph
         UndirectedGraph T1 = MinimalSpanningTree.MST(G1);
-
 
 //        Step 3. Construct the subgraph, Gs, of G by replacing each edge in T1 by its corresponding shortest path m G. (If there are several shortest paths, pick an arbitrary one.)
 //        create an empty graph that will eventually become the sub graph of the original graph created
 //        from the complete graph
         UndirectedGraph GS = new UndirectedGraph();
-
-        System.out.println("---- MST of COMPLETE GRAPH ----");
-        T1.printGraph();
 
 //        loop through each edge in the mst of the complete graph
         for (WeightedEdge edge1 : T1.getGraphEdges()) {
@@ -62,10 +56,6 @@ public class HeuristicSteinerTree {
             }
         }
 
-
-        System.out.println("---- Subgraph ----");
-        GS.printGraph();
-
 //        Step 4. Find the minimal spanning tree, Ts, of Gs. (If there are several minimal spanning trees, pick an arbitrary one.)
 //        find the minimal spanning tree of the subgraph gs
         UndirectedGraph TS = MinimalSpanningTree.MST(GS);
@@ -76,15 +66,11 @@ public class HeuristicSteinerTree {
 
 //        loops through all the nodes of the graph gs
         for (int node : originalNodesOfGraphGs) {
-//            if the node only has one egde, i.e., if it is a leaf node, then remove it by removing the edge
-            if (TS.getNodeEdges(node).size() == 1) {
+//            if the node only has one edge, i.e., if it is a leaf node, then remove it by removing the edge
+            if (TS.getNodeEdges(node).size() == 1 && !terminalPoints.contains(node)) {
                 TS.removeEdgeCascade(TS.getNodeEdges(node).get(0));
             }
         }
-        System.out.println("----- MST of Subgraph ------");
-        TS.printGraph();
-
-
 
         return TS;
     }
